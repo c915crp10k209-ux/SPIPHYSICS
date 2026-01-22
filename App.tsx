@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { SettingsProvider } from './contexts/SettingsContext';
 import { ProgressProvider } from './contexts/ProgressContext';
 import Header from './components/Header';
@@ -11,6 +11,7 @@ import NumerologyGuide from './components/demos/NumerologyGuide';
 import GamesDashboard from './components/GamesDashboard';
 import DemosDashboard from './components/DemosDashboard';
 import StudyPlanGenerator from './components/study/StudyPlanGenerator';
+import { injectSpeedInsights } from '@vercel/speed-insights';
 
 // Flatten topics for easy lookup, while preserving the module structure for the sidebar
 const ALL_TOPICS: SubTopic[] = MODULES.flatMap(m => m.topics);
@@ -19,6 +20,11 @@ function App() {
   const [selectedTopicId, setSelectedTopicId] = useState<string>(ALL_TOPICS[0].id);
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
   const [currentView, setCurrentView] = useState<'topics' | 'numerology' | 'games' | 'demos' | 'plans'>('topics');
+
+  // Initialize Vercel Speed Insights
+  useEffect(() => {
+    injectSpeedInsights();
+  }, []);
 
   const selectedTopic = ALL_TOPICS.find(t => t.id === selectedTopicId) as SubTopic;
 
